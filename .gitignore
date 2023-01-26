@@ -10,7 +10,7 @@
 !.vscode/*.code-snippets
 
 .node_modules/*
-.src/Data/config.json
+src/Data/config.json
 
 # Local History for Visual Studio Code
 .history/
