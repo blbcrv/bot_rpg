@@ -15,56 +15,56 @@ module.exports = new Event("messageCreate", (client, message) => {
 		let first_xp = 200
 		let first_lvl = 1
 
-		db.query(member, (e, r) => {
-			if (e) {
-				let insert = `insert into members (discord, exp, lvl) values (${id}, 0, 1)`
+		// db.query(member, (e, r) => {
+		// 	if (e) {
+		// 		let insert = `insert into members (discord, exp, lvl) values (${id}, 0, 1)`
 
-				db.query(insert)
-			}
+		// 		db.query(insert)
+		// 	}
 
-			try {
-				let memberExp = r[0].exp
-				let memberLvl = r[0].lvl
-				let max_xp = memberLvl * first_xp
-				let rank_channel = "842448870037258241"
+		// 	try {
+		// 		let memberExp = r[0].exp
+		// 		let memberLvl = r[0].lvl
+		// 		let max_xp = memberLvl * first_xp
+		// 		let rank_channel = "842448870037258241"
 
-				memberExp += expValueAdd
+		// 		memberExp += expValueAdd
 
-				let updateExp = `update members set exp = ${memberExp} where discord = '${id}'`
+		// 		let updateExp = `update members set exp = ${memberExp} where discord = '${id}'`
 
-				db.query(updateExp, (e) => {
-					if (e) console.log(e)
-				})
+		// 		db.query(updateExp, (e) => {
+		// 			if (e) console.log(e)
+		// 		})
 
-				if (memberExp >= max_xp) {
-					memberExp = 0
-					memberLvl += 1
+		// 		if (memberExp >= max_xp) {
+		// 			memberExp = 0
+		// 			memberLvl += 1
 
-					let updateLvl = `update members set lvl = ${memberLvl}, exp = ${memberExp} where discord = '${id}'`
+		// 			let updateLvl = `update members set lvl = ${memberLvl}, exp = ${memberExp} where discord = '${id}'`
 
-					db.query(updateLvl, (e) => {
-						if (e) console.log(e)
-					})
+		// 			db.query(updateLvl, (e) => {
+		// 				if (e) console.log(e)
+		// 			})
 
-					let profilEmbed = new Discord.MessageEmbed()
-						.setAuthor(`${message.author.username}`, `${message.author.avatarURL()}`)
-						.setDescription(`${message.author.username} est passé au niveau ${memberLvl}`)
-						.setColor('BLUE')
-						.setThumbnail(`${message.author.avatarURL()}`)
+		// 			let profilEmbed = new Discord.MessageEmbed()
+		// 				.setAuthor(`${message.author.username}`, `${message.author.avatarURL()}`)
+		// 				.setDescription(`${message.author.username} est passé au niveau ${memberLvl}`)
+		// 				.setColor('BLUE')
+		// 				.setThumbnail(`${message.author.avatarURL()}`)
 
 
-					client.channels.cache.get(`${rank_channel}`).send({ embeds: [profilEmbed] });
-				}
-			}
-			catch (e) {
-				console.log(e)
+		// 			client.channels.cache.get(`${rank_channel}`).send({ embeds: [profilEmbed] });
+		// 		}
+		// 	}
+		// 	catch (e) {
+		// 		console.log(e)
 
-				console.log(message.author.id)
-				let insert = `insert into members (discord, exp, lvl) values (${id}, 0, 1)`
+		// 		console.log(message.author.id)
+		// 		let insert = `insert into members (discord, exp, lvl) values (${id}, 0, 1)`
 
-				db.query(insert)
-			}
-		})
+		// 		db.query(insert)
+		// 	}
+		// })
 	}
 	else {
 
