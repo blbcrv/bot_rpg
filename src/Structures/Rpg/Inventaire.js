@@ -1,5 +1,6 @@
 class Inventaire {
     constructor(){
+        
         this.contenance = [];
         this.taille = this.contenance.length;
     }
@@ -7,6 +8,7 @@ class Inventaire {
 
    addContenance(item){
         this.contenance.push(item)
+        console.log(this.contenance)
     }
     
 

@@ -1,6 +1,6 @@
 const Classe = require("../../Structures/Rpg/Classe")
 const Character = require("../../Structures/Rpg/Character")
-const config = require("../../Data/config.json")
+const config = require("../../Data/game_data.json")
 const Inventaire = require("../../Structures/Rpg/Inventaire")
 const Arme = require("../../Structures/Rpg/Arme")
 
@@ -14,7 +14,7 @@ function registerPlayer(nomClasse, db, interaction) {
         let newPlayer = new Character(config.playerName, guerrierClasse, guerrierClasse.attaque, guerrierClasse.defense)
         let insertPlayer = `insert into players (discord, nom, vie, attaque, defense, classe, inventaire) values ("${interaction.user.id}", "${newPlayer.nom}", ${newPlayer.vie}, ${newPlayer.attaque}, ${newPlayer.defense}, '${JSON.stringify(newPlayer.classe)}', '${JSON.stringify(fillPlayerInventoryAtStart(newPlayer.classe, db))}')`
 
-        db.query(insertPlayer)
+        db.query(insertPlayer, (e) => { if (e) return console.log })
 
         interaction.channel.send("Création de personnage réalisée avec succès !")
     })
@@ -28,11 +28,13 @@ function fillPlayerInventoryAtStart(classe, db) {
             reqArmeBaseDonnee(db, "Epee", inventaire)
 
         case 'Archer':
-            reqArmeBaseDonnee(db, "Arc", inventaire)
+            inventaire.addContenance(new Arme("Arc", 50, 10))
 
-        break
+            break
     }
-    return inventaire.contenance;
+
+    return inventaire.contenance
+    
 }
 
 /**
@@ -42,15 +44,16 @@ function fillPlayerInventoryAtStart(classe, db) {
  * @param {Inventaire} inventaire 
  */
 function reqArmeBaseDonnee(db, nom, inventaire) {
-    
+
     let getArme = `select nom, attaque, defense from armes where nom = '${nom}'`
 
-   db.query(getArme,(e, r) => {
+    db.query(getArme, (e, r) => {
         if (e) return console.log(e)
-        let arme = r[0]
+        let arme = new Arme(r[0].nom, r[0].attaque, r[0].defense)
+        console.log(arme)
         inventaire.addContenance(arme)
     })
-    
+
 
 }
 
