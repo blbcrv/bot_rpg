@@ -5,9 +5,9 @@ const config = require('../../Data/game_data.json')
 
 
 module.exports = new Command({
-    name: "register",
-    description: "Permet de créer son joueur",
-    utilisation: "<prefix>register",
+    name: "test",
+    description: "test",
+    utilisation: "<prefix>test",
     argument: "null",
     async run(message, args, client) {
         const db = client.db
@@ -18,6 +18,7 @@ module.exports = new Command({
             if (e) return console.log(e)
             if (r.length != 0) return message.reply("Vous avez déjà créé votre personnage !")
 
+            console.log(message.author);
             message.channel.send("Choisir un nom de personnage : ")
                 .then(
 
