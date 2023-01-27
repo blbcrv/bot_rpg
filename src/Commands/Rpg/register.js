@@ -50,14 +50,6 @@ module.exports = new Command({
                             await message.reply({ components: [row] });
                         })
                 )
-
-
-
-
-
-
         })
-
-
     }
 });

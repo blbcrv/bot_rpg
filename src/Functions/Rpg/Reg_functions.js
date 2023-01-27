@@ -3,6 +3,7 @@ const Character = require("../../Structures/Rpg/Character")
 const config = require("../../Data/game_data.json")
 const Inventaire = require("../../Structures/Rpg/Inventaire")
 const Arme = require("../../Structures/Rpg/Arme")
+const { json } = require("express")
 
 function registerPlayer(nomClasse, db, interaction) {
     let initClasse = `select nom, attaque, defense from classes where nom = '${nomClasse}'`
@@ -10,51 +11,69 @@ function registerPlayer(nomClasse, db, interaction) {
     db.query(initClasse, (e, r) => {
         if (e) return console.log(e)
         let res = r[0]
-        let guerrierClasse = new Classe(res.nom, res.attaque, res.defense)
-        let newPlayer = new Character(config.playerName, guerrierClasse, guerrierClasse.attaque, guerrierClasse.defense)
-        let insertPlayer = `insert into players (discord, nom, vie, attaque, defense, classe, inventaire) values ("${interaction.user.id}", "${newPlayer.nom}", ${newPlayer.vie}, ${newPlayer.attaque}, ${newPlayer.defense}, '${JSON.stringify(newPlayer.classe)}', '${JSON.stringify(fillPlayerInventoryAtStart(newPlayer.classe, db))}')`
+        let classe = new Classe(res.nom, res.attaque, res.defense)
+        let newPlayer = new Character(config.playerName, classe, classe.attaque, classe.defense)
 
-        db.query(insertPlayer, (e) => { if (e) return console.log })
+        let insertPlayer = `insert into players (discord, nom, vie, attaque, defense, classe) values ("${interaction.user.id}", "${newPlayer.nom}", ${newPlayer.vie}, ${newPlayer.attaque}, ${newPlayer.defense}, '${JSON.stringify(newPlayer.classe)}')`
+
+        db.query(insertPlayer, (e) => { if (e) return console.log(e) })
+        fillPlayerInventoryAtStart(classe, db, interaction)
+        console.log(getPlayerInvData(interaction, db))
 
         interaction.channel.send("Création de personnage réalisée avec succès !")
     })
 }
 
-function fillPlayerInventoryAtStart(classe, db) {
+/**
+ * 
+ * @param {Classe} classe 
+ * @param {Database} db 
+ * @param {import("discord.js").Interaction} interaction 
+ */
+function fillPlayerInventoryAtStart(classe, db, interaction) {
     let inventaire = new Inventaire();
 
     switch (classe.nom) {
         case 'Guerrier':
-            reqArmeBaseDonnee(db, "Epee", inventaire)
+
+            inventaire.addContenance(new Arme("Epee", 50, 10))
 
         case 'Archer':
+
             inventaire.addContenance(new Arme("Arc", 50, 10))
 
             break
+
     }
 
-    return inventaire.contenance
-    
+    let convertData = JSON.stringify(inventaire.contenance)
+    let insertInv = `insert into Inventaires values ('${interaction.user.id}', '${convertData}') `
+
+    db.query(insertInv, (e) => { if (e) console.log(e) })
+
 }
 
 /**
- * 
- * @param {*} db 
- * @param {*} nom 
- * @param {Inventaire} inventaire 
+ *  
+ * @param {import("discord.js").Interaction} interaction
  */
-function reqArmeBaseDonnee(db, nom, inventaire) {
+function getPlayerInvData (interaction, db) {
+    let getInventory = `select contenu from Inventaires where discord = "${interaction.user.id}"`
+    let output;
 
-    let getArme = `select nom, attaque, defense from armes where nom = '${nom}'`
+    db.query(getInventory, (e,r) =>{
+        if (e) console.log(e)
 
-    db.query(getArme, (e, r) => {
-        if (e) return console.log(e)
-        let arme = new Arme(r[0].nom, r[0].attaque, r[0].defense)
-        console.log(arme)
-        inventaire.addContenance(arme)
+        getPlayerInventory(r[0])
     })
 
-
+    
+    
 }
+function getPlayerInventory(data){
+    let parsedData =JSON.parse(data.contenu)[0]
+    console.log(parsedData)
+}
+
 
 module.exports = { registerPlayer }

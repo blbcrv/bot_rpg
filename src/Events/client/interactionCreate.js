@@ -9,7 +9,7 @@ module.exports = new Event("interactionCreate", async (client, interaction) => {
 		registerPlayer(interaction.values[0], client.db, interaction)
 	}
 	else if(interaction.values[0] === "archer"){
-
+		
 		registerPlayer(interaction.values[0], client.db, interaction)
 
 	}

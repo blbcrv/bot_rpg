@@ -8,7 +8,6 @@ class Inventaire {
 
    addContenance(item){
         this.contenance.push(item)
-        console.log(this.contenance)
     }
     
 
