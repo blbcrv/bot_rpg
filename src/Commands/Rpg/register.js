@@ -1,8 +1,7 @@
 /** @format */
 const Command = require("../../Structures/Command.js");
 const Discord = require('discord.js');
-const Character = require("../../Structures/Rpg/Character.js");
-const config = require('../../Data/config.json')
+const config = require('../../Data/game_data.json')
 
 
 module.exports = new Command({
