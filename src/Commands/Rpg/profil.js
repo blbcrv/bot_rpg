@@ -25,7 +25,7 @@ module.exports = new Command({
                     ❤️ Vie : ${r[0].vie} \n 
                     🔪 Attaque : ${r[0].attaque} \n 
                     🛡 Défense : ${r[0].defense} \n
-                    🎒 Inventaire : ${JSON.parse(r[0].inventaire)}`)
+                    🎒 Inventaire : ${JSON.parse(r[0].inventaire)[0].nom}`)
                     .setColor(0x0099FF)
 
                 message.channel.send({ embeds: [profilEmbed] })
