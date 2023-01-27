@@ -14,7 +14,7 @@ function registerPlayer(nomClasse, db, interaction) {
         let classe = new Classe(res.nom, res.attaque, res.defense)
         let newPlayer = new Character(config.playerName, classe, classe.attaque, classe.defense)
 
-        let insertPlayer = `insert into players (discord, nom, vie, attaque, defense, classe) values ("${interaction.user.id}", "${newPlayer.nom}", ${newPlayer.vie}, ${newPlayer.attaque}, ${newPlayer.defense}, '${JSON.stringify(newPlayer.classe)}')`
+        let insertPlayer = `insert into players (discord, nom, vie, attaque, defense, classe) values ("${interaction.user.id}", "${interaction.user.username}", ${newPlayer.vie}, ${newPlayer.attaque}, ${newPlayer.defense}, '${JSON.stringify(newPlayer.classe)}')`
 
         db.query(insertPlayer, (e) => { if (e) return console.log(e) })
         fillPlayerInventoryAtStart(classe, db, interaction)
