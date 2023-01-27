@@ -1,6 +1,7 @@
 /** @format */
 const Command = require("../../Structures/Command.js");
 const Discord = require('discord.js');
+const config = require('../../Data/config.json')
 
 module.exports = new Command({
     name: "profil",
@@ -24,7 +25,8 @@ module.exports = new Command({
                     .setDescription(`🗡 Classe : ${classe.nom} \n 
                     ❤️ Vie : ${r[0].vie} \n 
                     🔪 Attaque : ${r[0].attaque} \n 
-                    🛡 Défense : ${r[0].defense} \n`)
+                    🛡 Défense : ${r[0].defense} \n
+                    🎒 Inventaire : **${config.prefix}inventaire**`)
                     .setColor(0x0099FF)
 
                 message.channel.send({ embeds: [profilEmbed] })

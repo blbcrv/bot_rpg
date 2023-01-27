@@ -3,7 +3,7 @@ const Command = require("../../Structures/Command.js");
 const Discord = require('discord.js');
 
 module.exports = new Command({
-    name: "inv",
+    name: "inventaire",
     description: "Permet de voir son inventaire",
     utilisation: "<prefix>inventaire",
     argument: "null",
